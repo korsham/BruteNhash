@@ -104,7 +104,7 @@ function perform(pathToInputFile, pathToOutputFile) {
 			console.error('ACHTUNG!\nОтказано в доступе к файлу ' + pathToInputFile);
 			process.exit(-1);
 		}
-}
+	}
 
 	var text = data.toString();
 	let template = readlineSync.question("Enter your template: ");
@@ -133,15 +133,16 @@ function perform(pathToInputFile, pathToOutputFile) {
 	fs.writeFile(pathToOutputFile, newTextOne, (err) => {
 		if (err) {
 			if (err.code == 'EACCES')
-			console.error('ACHTUNG!\nОтказано в доступе к файлу ' + pathToOutputFile);
+				console.error('ACHTUNG!\nОтказано в доступе к файлу ' + pathToOutputFile);
 			process.exit(-1);
 		}
 	});
 	fs.writeFile(pathToOutputFile, newTextTwo, (err) => {
-		if (err) {
+		if (err) 
+		{
 			if (err.code == 'EACCES')
 				console.error('ACHTUNG!\nОтказано в доступе к файлу ' + pathToOutputFile);
-				process.exit(-1);
+			process.exit(-1);
 		}
 	});
 	});
