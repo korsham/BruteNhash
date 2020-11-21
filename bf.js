@@ -35,7 +35,6 @@ function Find1(text, template) {
 				if (j == template.length - 1)
 				{
 					output = output + (i + 1).toString() + " ";
-					console.log(i + 1);
 					break;
 				}						
 				k++;
@@ -57,7 +56,6 @@ function Find2 (text, template) {
 			if (j == template.length - 1)
 			{
 				output = output + (i + 1).toString() + " ";
-				console.log(i + 1);
 				break;
 			}
 			k++;
