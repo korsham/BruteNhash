@@ -19,17 +19,17 @@ function Find1(text, template) {
 	let output = "";
 	hsTemplate = 0;
 	hstext = 0;
-	for (let g = 0; g <= template.length; g++)
+	for (let i = 0; i < template.length; i++)
 	{
-		hsTemplate += template.charCodeAt(template[g]);
-		hstext += text.charCodeAt(text[g]);
+		hsTemplate += template.charCodeAt(template[i]);
+		hstext += text.charCodeAt(text[i]);
 	}
-	if (hsTemplate == hstext)
+	for (let i = 0; i < text.length - template.length + 1; i++)
 	{
-		for (let i = 0; i < template.length; i++)
+		if (hstext == hsTemplate)
 		{
-			let j = 0;
 			let k = i;
+			let j = 0;
 			while (text[k] == template[j])
 			{
 				if (j == template.length - 1)
@@ -37,36 +37,13 @@ function Find1(text, template) {
 					output = output + (i + 1).toString() + " ";
 					console.log(i + 1);
 					break;
-				}
+				}						
 				k++;
 				j++;
 			}
 		}
+		hstext = hstext - text.charCodeAt(i) + text.charCodeAt(i + template.length);
 	}
-
-	for (let i = template.length; i < text.length - template.length + 1; i++)
-		{
-			if (hsTemplate == hstext)
-			{
-				let j = 0;
-				if (text[i] == template[j])
-				{
-					let k = i;
-					while (text[k] == template[j])
-					{
-						if (j == template.length - 1)
-						{
-							output = output + (i + 1).toString() + " ";
-							console.log(i + 1);
-							break;
-						}						
-						k++;
-						j++;
-					}
-				}
-			}
-				hstext = hstext + text.charCodeAt(text[i + template.length - 1]) - text.charCodeAt(text[i - 1]);
-		}	
 	return output;
 }
 function Find2 (text, template) {
@@ -115,7 +92,8 @@ function perform(pathToInputFile, pathToOutputFile) {
 	}
 	let start = new Date();
 	let newTextOne = Find1(text, template);
-	if (newTextOne == "")	{
+	if (newTextOne == "")
+	{
 		console.log("No matches has been found");
 		process.exit(-1);
 	}
