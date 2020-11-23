@@ -15,9 +15,26 @@ function getParametersOfProgram() {
 	}
 	return new Array(pathToInputFile, pathToOutputFile);
 }
+
+function doSearch(text, template, output, i) {
+	let k = i;
+	let j = 0;
+	while (text[k] == template[j])
+	{
+		if (j == template.length - 1)
+		{
+			output = output + (i + 1).toString() + " ";
+			break;
+		}
+		k++;
+		j++;
+	}
+	return output;
+}
+
 function SimpleHash(text, template) {
+    let output = "";
 	let collision = 0;
-	let output = "";
 	hsTemplate = 0;
 	hstext = 0;
 	for (let i = 0; i < template.length; i++)
@@ -29,21 +46,11 @@ function SimpleHash(text, template) {
 	{
 		if (hstext == hsTemplate)
 		{
-			let k = i;
-			let j = 0;
-			while (text[k] == template[j])
+			oldOutput = output;
+			output = doSearch(text, template, output, i);
+			if (oldOutput == output)
 			{
-				if (j == template.length - 1)
-				{
-					output = output + (i + 1).toString() + " ";
-					break;
-				}
-				if (text[k + 1] != template[j + 1])
-				{
-					collision++;
-				}	
-				k++;
-				j++;
+				collision++;
 			}
 		}
 		hstext = hstext - text.charCodeAt(i) + text.charCodeAt(i + template.length);
@@ -60,27 +67,16 @@ function SquareHash(text, template) {
 	{
 		hsTemplate += template.charCodeAt(i) * template.charCodeAt(i);
 		hstext += text.charCodeAt(i) * text.charCodeAt(i);
-		//console.log(hstext);
 	}
 	for (let i = 0; i < text.length - template.length + 1; i++)
 	{
-		if (hstext == hsTemplate)
+		if (hsTemplate == hstext)
 		{
-			let k = i;
-			let j = 0;
-			while (text[k] == template[j])
+			oldOutput = output;
+			output = doSearch(text, template, output, i);
+			if (oldOutput == output)
 			{
-				if (j == template.length - 1)
-				{
-					output = output + (i + 1).toString() + " ";
-					break;
-				}
-				if (text[k + 1] != template[j + 1])
-				{
-					collision++;
-				}	
-				k++;
-				j++;
+				collision++;
 			}
 		}
 		hstext = hstext - text.charCodeAt(i) * text.charCodeAt(i) + text.charCodeAt(i + template.length) * text.charCodeAt(i + template.length);
@@ -93,22 +89,7 @@ function BruteForce (text, template) {
 	let output = "";
 	for (let i = 0; i < text.length - template.length + 1; i++) 
 	{
-		let j = 0;
-		let k = i;
-		while (text[k] == template[j])
-		{
-			if (j == template.length - 1)
-			{
-				output = output + (i + 1).toString() + " ";
-				break;
-			}
-			if (text[k + 1] != template[j + 1])
-				{
-					collision++;
-				}	
-			k++;
-			j++;
-		}
+		output = doSearch(text, template, output, i);
 	}
 	return output;
 }
@@ -126,21 +107,11 @@ function CarpHash(text, template) {
 	{
 		if (hstext == hsTemplate)
 		{
-			let k = i;
-			let j = 0;
-			while (text[k] == template[j])
+			oldOutput = output;
+			output = doSearch(text, template, output, i);
+			if (oldOutput == output)
 			{
-				if (j == template.length - 1)
-				{
-					output = output + (i + 1).toString() + " ";
-					break;
-				}
-				if (text[k + 1] != template[j + 1])
-				{
-					collision++;
-				}				
-				k++;
-				j++;
+				collision++;
 			}
 		}
 		hstext = (hstext - text.charCodeAt(i) * Math.pow(2, template.length - 1)) * 2 + text.charCodeAt(i + template.length);
@@ -183,7 +154,7 @@ function perform(pathToInputFile, pathToOutputFile) {
 	console.log("Time for hash:", end - start);
 	console.log(" ");
 	start = new Date();
-	let newTextTwo = BruteForce(text, template);
+    let newTextTwo = BruteForce(text, template);
 	if (newTextTwo == "")
 	{
 		console.log("No matches has been found");
@@ -218,7 +189,7 @@ function perform(pathToInputFile, pathToOutputFile) {
 			process.exit(-1);
 		}
 	});
-	fs.writeFile(pathToOutputFile, newTextTwo, (err) => {
+	fs.writeFile(pathToOutputFile, newTextOne, (err) => {
 		if (err) 
 		{
 			if (err.code == 'EACCES')
